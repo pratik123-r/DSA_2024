@@ -40,10 +40,8 @@ var subarraySum = function (arr, sum) {
 
         // Add the current prefix sum to the map or update its count
         prefixSumMap.set(prefixSum, (prefixSumMap.get(prefixSum) || 0) + 1);
-        console.log(i, count);
+        
     }
-    
-
     return count;
 };
 
@@ -51,10 +49,11 @@ var subarraySum = function (arr, sum) {
 
 
 
-console.log(subarraySum([1, -1, 0], 0)); // 1 0 0  
-console.log(subarraySum([1, 2, 3, -3, 1, 1, 1, 4, 2, -3], 3)); // 1 3 6 3 4 5 6 10 12 9 
-console.log(subarraySum([3, 1, 2, 3, 1, 5], 6)); // 3 4 6 9 10 15 
-console.log(subarraySum([1, 2, 3], 3)); // 1 3 3
+// console.log(subarraySum([1, -1, 0], 0)); // 1 0 0  
+// console.log(subarraySum([1, 2, 3, -3, 1, 1, 1, 4, 2, -3], 3)); // 1 3 6 3 4 5 6 10 12 9 
+console.log(subarraySum([3,-3,0,3], 3)); // 1 3 6 3 4 5 6 10 12 9 
+// console.log(subarraySum([3, 1, 2, 3, 1, 5], 6)); // 3 4 6 9 10 15 
+// console.log(subarraySum([1, 2, 3], 3)); // 1 3 3
 
 
 
