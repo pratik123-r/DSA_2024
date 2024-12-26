@@ -16,5 +16,5 @@ function solve(bt) {
         waitingTime += totalTime
         totalTime += bt[i]
     }
-    return Math.floor((waitingTime / bt.length))
+    return Math.floor((waitingTime / bt.length)) 
 }
