@@ -1,4 +1,4 @@
-class Heap {
+export class Heap {
     constructor() {
       this.data = [];
     }
@@ -117,18 +117,18 @@ class Heap {
   }
   
   // Example usage:
-  const heap = new Heap();
-  heap.insert(3);
-  heap.insert(1);
-  heap.insert(6);
-  heap.insert(5);
-  heap.insert(2);
-  heap.insert(4);
-  console.log(heap.toArray()); // [1, 2, 4, 5, 3, 6]
-  console.log(heap.delete()); // 1
-  console.log(heap.toArray()); // [2, 3, 4, 5, 6]
+//   const heap = new Heap();
+//   heap.insert(3);
+//   heap.insert(1);
+//   heap.insert(6);
+//   heap.insert(5);
+//   heap.insert(2);
+//   heap.insert(4);
+//   console.log(heap.toArray()); // [1, 2, 4, 5, 3, 6]
+//   console.log(heap.delete()); // 1
+//   console.log(heap.toArray()); // [2, 3, 4, 5, 6]
   
-  const arr = [3, 1, 6, 5, 2, 4];
-  heap.heapify(arr);
-  console.log(heap.toArray()); // [1, 2, 4, 5, 3, 6]
+//   const arr = [3, 1, 6, 5, 2, 4];
+//   heap.heapify(arr);
+//   console.log(heap.toArray()); // [1, 2, 4, 5, 3, 6]
   
