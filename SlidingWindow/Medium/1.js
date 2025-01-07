@@ -34,4 +34,25 @@ function consecutiveOnes(arr, k){
     return ans
 }
 
+function consecutiveOnes(arr, k) {
+    let zeroIndices = [];
+    let start = 0;
+    let ans = 0;
+
+    for (let end = 0; end < arr.length; end++) {
+        if (arr[end] === 0) {
+            zeroIndices.push(end);
+        }
+
+        if (zeroIndices.length > k) {
+            start = zeroIndices.shift() + 1;
+        }
+
+        ans = Math.max(ans, end - start + 1);
+    }
+
+    return ans;
+}
+
+
 console.log(consecutiveOnes([0,0,1,1,0,0,1,1,1,0,1,1,0,0,0,1,1,1,1], 3));
