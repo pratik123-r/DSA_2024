@@ -1,4 +1,3 @@
-<script>
 // General currying function (works for any number of arguments)
 function curry(fn) {
     return function curried(...args) {
@@ -15,11 +14,9 @@ function curry(fn) {
   function multiply(a, b, c) {
     return a * b * c;
   }
-  multiply.length
   
   const curriedMultiply = curry(multiply);
   
-//   console.log(curriedMultiply(2)(3)(4)); // Output: 24
-  console.log(curriedMultiply(2, 3)(4)(2)); // Output: 24
-
-</script>
+  console.log(curriedMultiply(2)(3)(4)); // Output: 24
+  console.log(curriedMultiply(2, 3)(4)); // Output: 24
+  
