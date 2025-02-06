@@ -70,6 +70,6 @@ function nextPermutation(arr) {
     reverse(arr, i+1);
     return arr;
 }
-console.log(nextPermutation([1, 2, 5, 4, 3])); // ans -- [ 1, 3, 2, 4, 5 ]
+console.log(nextPermutation([1, 3, 5, 4, 2])); // ans -- [ 1, 4, 2, 3, 5 ]
 
 console.log(findPermutation([1,2,3], 0, 2, []));
