@@ -26,6 +26,7 @@ function findSecondLargest(arr) {
     let secondLargest = -1;
     for (let index = 1; index < arr.length; index++) {
         if(arr[index] > largest) {
+            secondLargest = largest
             largest = arr[index];
         }
         if(arr[index] > secondLargest && arr[index] < largest) {
