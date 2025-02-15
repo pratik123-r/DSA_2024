@@ -19,22 +19,30 @@
 
  */
 
-
-var maxScore = function (arr, k) {
-    let minSum = Number.MAX_VALUE
-    let minSumLen = arr.length - k;
-    let totalSum = 0;
-    for (let i = 0; i < arr.length; i++) {
-        totalSum += arr[i]
-    }
-    let sum = 0
-    for (let i = 0; i < arr.length; i++) {
-        sum += arr[i]
-        if (i >= arr.length - k - 1) {
-            minSum = Math.min(sum, minSum)
-            sum -= arr[i - arr.length + k + 1]
+    function maxScore(cardPoints, k) {
+        let res = 0;
+    
+        // First k elements in our window
+        for (let i = 0; i < k; i++) {
+            res += cardPoints[i];
         }
+    
+        let curr = res;
+    
+        for (let i = k - 1; i >= 0; i--) {
+            // Remove the last visited element and add the non-visited element from the end
+            curr -= cardPoints[i];
+            curr += cardPoints[cardPoints.length - k + i];
+    
+            // Check the maximum value of any possible combination
+            res = Math.max(res, curr);
+        }
+    
+        return res;
     }
-    return totalSum - minSum
-
-};
+    
+    // Example usage:
+    const cardPoints = [1, 2, 3, 4, 5, 6, 1];
+    const k = 3;
+    console.log(maxScore(cardPoints, k)); // Output: 12
+    
