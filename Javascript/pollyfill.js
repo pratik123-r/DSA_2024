@@ -138,3 +138,56 @@ boundFunction(); // Output: "Value: 42!"
 
 
 
+
+if (!Array.prototype.groupBy) {
+    Array.prototype.groupBy = function(callback) {
+      if (typeof callback !== 'function') {
+        throw new TypeError(callback + ' is not a function');
+      }
+      
+      const result = {};
+      
+      for (let index = 0; index < this.length; index++) {
+        // Compute the key for the current element using the callback
+        const key = callback(this[index], index, this);
+        
+        // If the key doesn't exist in the result, create an array for it
+        if (!result[key]) {
+          result[key] = [];
+        }
+        
+        // Add the current element to the corresponding group
+        result[key].push(this[index]);
+      }
+      
+      return result;
+    }
+  }
+  
+
+
+  
+
+
+const items = [
+    { type: 'fruit', name: 'apple' },
+    { type: 'vegetable', name: 'carrot' },
+    { type: 'fruit', name: 'banana' }
+  ];
+  
+  const groupedItems = items.groupBy((item) => item.type);
+  console.log(groupedItems);
+  
+  /*
+    Output:
+    {
+      fruit: [
+        { type: 'fruit', name: 'apple' },
+        { type: 'fruit', name: 'banana' }
+      ],
+      vegetable: [
+        { type: 'vegetable', name: 'carrot' }
+      ]
+    }
+  */
+  
