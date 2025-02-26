@@ -32,3 +32,26 @@ function jump(nums) {
 // Example usage:
 const nums = [2, 3, 1, 1, 4];
 console.log(jump(nums)); // Output: 2
+
+
+{
+
+    var jump = function(nums) {
+        let dp = new Array(nums.length).fill(-1)
+        return solve(0, nums, dp)
+    };
+    
+    var solve = function (currentInd, nums, dp) {
+        if(currentInd >= nums.length - 1)
+                return 0
+        
+    
+       if (dp[currentInd] !== -1) return dp[currentInd];
+    let ans = nums.length;
+        for(let i = currentInd+1 ; i <= nums[currentInd] + currentInd ; i++) {
+            let jump = 1 + solve(i , nums, dp)
+            ans = Math.min(ans, jump)
+        }
+        return dp[currentInd] = ans;
+    }
+}

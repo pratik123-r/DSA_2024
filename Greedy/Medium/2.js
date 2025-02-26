@@ -13,19 +13,21 @@
  */
 
 
-var canJump = function (nums) {
+/**
+ * @param {number[]} nums
+ * @return {boolean}
+ */
+var canJump = function(nums) {
     let maxindex = 0;
-    let count = 0;
     for (let i = 0; i < nums.length; i++) {
+        if(i > maxindex)
+            return false
         if (nums[i] + i > maxindex) {
             maxindex = nums[i] + i
         }
-        if(i == maxindex) {
-            count++
-        }
 
     }
-    return count
+    return true
 };
 
 canJump([2,3,1,1,4])
