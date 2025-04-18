@@ -43,7 +43,7 @@ var characterReplacement = function (str, k) {
     for (let e = 0; e < str.length; e++) {
         map.set(str[e], (map.get(str[e]) || 0) + 1)
         let maxChar = Math.max(...map.values())
-            while ((e-s+1) - maxChar > k) {
+            if ((e-s+1) - maxChar > k) {
                 if(map.get(str[s]) > 0) {
                     map.set(str[s], map.get(str[s])-1)
                 }else {

@@ -28,7 +28,9 @@
 
 }
 
+//Lower Bound: The index of the first element ≥ given value.
 
+//Upper Bound: The index of the first element > given value.
 
 
 function lowerBound(arr, n, x) {
