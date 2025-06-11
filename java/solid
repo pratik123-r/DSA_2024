@@ -1,0 +1,196 @@
+Single Responsibility Principle (SRP) 
+
+A class should have only one reason to change.
+
+❌ Bad Example (Violates SRP):
+class Report {
+    public String generateReport() {
+        // logic to generate report
+        return "Report Data";
+    }
+
+    public void saveToFile(String reportData) {
+        // logic to save to file
+    }
+
+    public void sendEmail(String reportData) {
+        // logic to send email
+    }
+}
+
+🔴 Problem: This class handles:
+
+Report generation
+
+File saving
+
+Email sending
+
+So, it has multiple reasons to change.
+
+
+✅ Good Example (Follows SRP):
+
+class Report {
+    public String generate() {
+        // logic to generate report
+        return "Report Data";
+    }
+}
+
+class ReportSaver {
+    public void save(String data) {
+        // logic to save report
+    }
+}
+
+class ReportEmailer {
+    public void send(String data) {
+        // logic to send report via email
+    }
+}
+
+Each class now has one responsibility:
+
+Report → only generates reports
+
+ReportSaver → only saves to file
+
+ReportEmailer → only sends emails
+
+
+
+
+
+
+
+
+
+🔐 Open/Closed Principle (OCP)
+
+"Software entities (classes, modules, functions) should be open for extension but closed for modification."
+
+This means you should be able to add new functionality without changing existing code.
+
+❌ Without OCP – Bad Design:
+
+class InvoicePrinter {
+    public void printInvoice(String type) {
+        if (type.equals("PDF")) {
+            System.out.println("Printing PDF invoice");
+        } else if (type.equals("HTML")) {
+            System.out.println("Printing HTML invoice");
+        }
+    }
+}
+
+✅ With OCP – Good Design Using Polymorphism:
+
+1. Create an Interface
+interface InvoiceFormat {
+    void print();
+}
+
+2. Create Extensions
+class PdfInvoice implements InvoiceFormat {
+    public void print() {
+        System.out.println("Printing PDF invoice");
+    }
+}
+
+class HtmlInvoice implements InvoiceFormat {
+    public void print() {
+        System.out.println("Printing HTML invoice");
+    }
+}
+
+
+3. Use the Interface
+class InvoicePrinter {
+    private InvoiceFormat format;
+
+    public InvoicePrinter(InvoiceFormat format) {
+        this.format = format;
+    }
+
+    public void print() {
+        format.print();
+    }
+}
+
+✅ Usage:
+public class Main {
+    public static void main(String[] args) {
+        InvoicePrinter printer = new InvoicePrinter(new PdfInvoice());
+        printer.print(); // "Printing PDF invoice"
+    }
+}
+
+Now, if you want to support "Excel" invoices:
+
+✅ Just create a ExcelInvoice class implementing InvoiceFormat
+
+❌ No need to modify InvoicePrinter — OCP is preserved
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Liskov Substitution Principle (LSP)
+
+"Objects of a superclass should be replaceable with objects of a subclass without altering the correctness of the program."
+
+🔴 Violating LSP – Bad Example:
+
+class Bird {
+    public void fly() {
+        System.out.println("Flying");
+    }
+}
+
+class Ostrich extends Bird {
+    @Override
+    public void fly() {
+        throw new UnsupportedOperationException("Ostrich can't fly");
+    }
+}
+
+🔴 Problem: Ostrich is a Bird, but it can’t fly. Replacing Bird with Ostrich breaks the logic.
+
+✅ Following LSP – Good Design:
+Refactor the design so that only birds that can fly inherit from FlyingBird.
+
+class Bird {
+    public void eat() {
+        System.out.println("Eating...");
+    }
+}
+
+class FlyingBird extends Bird {
+    public void fly() {
+        System.out.println("Flying...");
+    }
+}
+
+class Sparrow extends FlyingBird {
+    // valid fly()
+}
+
+class Ostrich extends Bird {
+    // no fly() here
+}
+
+
+
+
+
+
