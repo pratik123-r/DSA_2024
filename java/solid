@@ -194,3 +194,146 @@ class Ostrich extends Bird {
 
 
 
+
+
+
+
+
+🔹 ISP – Interface Segregation Principle
+"Clients should not be forced to depend on interfaces they do not use."
+
+✅ Goal:
+Break large, fat interfaces into smaller, specific ones so that implementing classes only need to implement what they actually use.
+
+❌ Violation Example:
+
+interface Worker {
+    void work();
+    void eat();
+}
+
+class Robot implements Worker {
+    public void work() {
+        // Implementation of work
+    }
+
+    public void eat() {
+        throw new UnsupportedOperationException("Robots don't eat");
+    }
+}
+
+✅ Fix using ISP:
+Split into smaller interfaces:
+
+interface Workable {
+    void work();
+}
+
+interface Eatable {
+    void eat();
+}
+
+class Human implements Workable, Eatable {
+    public void work() {
+        // Human working
+    }
+
+    public void eat() {
+        // Human eating
+    }
+}
+
+class Robot implements Workable {
+    public void work() {
+        // Robot working
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+🔸 DIP – Dependency Inversion Principle with Database Repository Example
+
+✅ Goal:
+High-level business logic (e.g., UserService) should not depend on a specific database implementation.
+It should depend on an abstraction (interface) like UserRepository.
+
+------------------------------------
+❌ Violation Example (Tightly Coupled)
+------------------------------------
+
+class MySQLUserRepository {
+    public void saveUser(String username) {
+        System.out.println("Saving user to MySQL: " + username);
+    }
+}
+
+class UserService {
+    private MySQLUserRepository repo;
+
+    public UserService() {
+        this.repo = new MySQLUserRepository(); // TIGHTLY COUPLED
+    }
+
+    public void register(String username) {
+        repo.saveUser(username);
+    }
+}
+
+-------------------------------------
+✅ Good Design using DIP (Decoupled)
+-------------------------------------
+
+// Abstraction
+interface UserRepository {
+    void saveUser(String username);
+}
+
+// Low-level implementation
+class MySQLUserRepository implements UserRepository {
+    public void saveUser(String username) {
+        System.out.println("Saving user to MySQL: " + username);
+    }
+}
+
+class MongoUserRepository implements UserRepository {
+    public void saveUser(String username) {
+        System.out.println("Saving user to MongoDB: " + username);
+    }
+}
+
+// High-level module depends on abstraction
+class UserService {
+    private UserRepository repo;
+
+    public UserService(UserRepository repo) {
+        this.repo = repo;
+    }
+
+    public void register(String username) {
+        repo.saveUser(username);
+    }
+}
+
+// Main code
+public class Main {
+    public static void main(String[] args) {
+        UserRepository repo = new MySQLUserRepository(); // or new MongoUserRepository()
+        UserService service = new UserService(repo);
+        service.register("john_doe");
+    }
+}
+
