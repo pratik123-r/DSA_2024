@@ -1,0 +1,105 @@
+Handling concurrency in SQL is critical to ensure data integrity when multiple users or processes access or modify data at the same time.
+
+🧠 What is Concurrency?
+Concurrency in SQL means multiple transactions accessing the same data at the same time.
+
+⚠️ Risks:
+Dirty reads: Read uncommitted data.
+
+Lost updates: One update overwrites another.
+
+Non-repeatable reads: Data changes during a transaction.
+
+Phantom reads: New rows appear during a scan.
+
+✅ Techniques to Handle Concurrency in SQL
+1. Transactions
+Group operations into a transaction to ensure atomicity.
+
+sql
+Copy
+Edit
+BEGIN TRANSACTION;
+
+UPDATE accounts
+SET balance = balance - 100
+WHERE account_id = 1;
+
+UPDATE accounts
+SET balance = balance + 100
+WHERE account_id = 2;
+
+COMMIT;
+2. Isolation Levels
+SQL defines four isolation levels to control concurrency behavior:
+
+Level	Dirty Read	Non-Repeatable Read	Phantom Read
+READ UNCOMMITTED	✅	✅	✅
+READ COMMITTED	❌	✅	✅
+REPEATABLE READ	❌	❌	✅
+SERIALIZABLE	❌	❌	❌
+
+sql
+Copy
+Edit
+SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
+🔒 The stricter the level, the more locking is used — and less concurrency, but better consistency.
+
+3. Row-Level Locking
+Databases like PostgreSQL, MySQL (InnoDB), and SQL Server support row-level locks.
+
+sql
+Copy
+Edit
+SELECT * FROM orders
+WHERE order_id = 1
+FOR UPDATE;
+This locks the selected row until the transaction ends.
+
+4. Optimistic Locking (Manual in SQL)
+Instead of locking rows, use a version number or timestamp to detect conflicting updates.
+
+Example table:
+
+sql
+Copy
+Edit
+UPDATE products
+SET stock = stock - 1, version = version + 1
+WHERE product_id = 101 AND version = 5;
+If version doesn’t match, another user already updated it → handle conflict in app.
+
+5. Pessimistic Locking
+Assume conflict is likely → lock rows to prevent others from reading/writing.
+
+sql
+Copy
+Edit
+SELECT * FROM inventory
+WHERE item_id = 42
+FOR UPDATE;
+Other transactions trying to update the same row will wait or block.
+
+6. Deadlock Handling
+Deadlocks can occur when two transactions wait on each other.
+
+Use short transactions.
+
+Access tables in consistent order.
+
+Handle deadlocks in app layer with retry logic.
+
+✅ Best Practices
+Tip	Why It Helps
+Use transactions	Ensure atomic operations
+Use proper isolation levels	Balance between concurrency and consistency
+Keep transactions short	Reduces lock time and deadlock chance
+Index wisely	Avoid full-table locks
+Use optimistic locking for scale	Reduces locking in high-concurrency systems
+
+💡 Bonus: Tools and DB-Specific Features
+PostgreSQL: MVCC (Multi-Version Concurrency Control), advisory locks.
+
+MySQL InnoDB: Row-level locking, gap locks.
+
+SQL Server: Snapshot isolation, hints like WITH (ROWLOCK, XLOCK).
