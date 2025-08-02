@@ -26,3 +26,19 @@ let numPromise = mapSeries([1, 2, 3, 4, 5], function (num, callback) {
 numPromise
   .then((result) => console.log("success:" + result))
   .catch(() => console.log("no success"));
+
+//   new Promise((res, rej) => {
+//   res("dkdk");
+// })
+//   .then((data) => {
+//     return new Promise((res, rej) => {
+//       res("dhdh");
+//     }).then((data) => {
+//       return new Promise((res, rej) => {
+//         res(data);
+//       });
+//     });
+//   })
+//   .then((data) => {
+//     console.log(data);
+//   });

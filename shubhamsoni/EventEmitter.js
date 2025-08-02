@@ -1,54 +1,122 @@
-//Solution
-class EventEmitter {
-    constructor() {
-        this._eventSubscriptions = new Map();
-    }
-    // Subscribe to an event
-    subscribe(eventName, callback) {
-        // type check
-        if (typeof callback !== "function") {
-            throw new TypeError("Callback should be a function");
-        }
-        // if event already exist
-        if (!this._eventSubscriptions.has(eventName)) {
-            this._eventSubscriptions.set(eventName, new Map());
-        }
+function Events() {
+  this.subscriptionList = new Map();
+  this.subscribeOnceList = new Map();
+  this.subscribeOnceAsyncList = new Map();
 
-        //for unique idetifier, you can use Date.now() also
-        const subscriptionId = Symbol();
-        const subscriptions = this._eventSubscriptions.get(eventName);
-        subscriptions.set(subscriptionId, callback);
-        console.log(this._eventSubscriptions);
-        
-        return {
-            remove: () => {    
-                if (!subscriptions.has(subscriptionId)) {
-                    throw new Error("Subscription has already removed");
-                }
-                subscriptions.delete(subscriptionId);
-            }
-        };
+  this.subscribe = function (name, callback) {
+    if (!this.subscriptionList.has(name)) {
+      this.subscriptionList.set(name, [callback]);
+    } else {
+      const exisitngCallbacks = this.subscriptionList.get(name);
+      this.subscriptionList.set(name, [...exisitngCallbacks, callback]);
     }
-    // Emit an event
-    emit(eventName, ...args) {
-        const subscriptions = this._eventSubscriptions.get(eventName);
-        if (!subscriptions) {
-            throw new Error("No event found")
-        }
-        subscriptions.forEach(callback => callback(...args));
+
+    return {
+      remove: () => {
+        const exisitngCallbacks = this.subscriptionList.get(name);
+        const filtered = exisitngCallbacks.filter((e) => e !== callback);
+        this.subscriptionList.set(name, filtered);
+      }
+    };
+  };
+
+  this.subscribeOnce = function (name, callback) {
+    if (!this.subscribeOnceList.has(name)) {
+      this.subscribeOnceList.set(name, [callback]);
+    } else {
+      const exisitngCallbacks = this.subscribeOnceList.get(name);
+      this.subscribeOnceList.set(name, [...exisitngCallbacks, callback]);
     }
+  };
+
+  this.subscribeOnceAsync = async function (name) {
+    return new Promise((resolve, reject) => {
+      if (!this.subscribeOnceAsyncList.has(name)) {
+        this.subscribeOnceAsyncList.set(name, [resolve]);
+      } else {
+        const exisitngCallbacks = this.subscribeOnceAsyncList.get(name);
+        this.subscribeOnceAsyncList.set(name, [...exisitngCallbacks, resolve]);
+      }
+    });
+  };
+
+  this.publish = function (name, data) {
+    const callbacks = this.subscriptionList.get(name) || [];
+    callbacks.forEach((e) => {
+      e(data);
+    });
+
+    const subscribeOnceCallbacks = this.subscribeOnceList.get(name) || [];
+    subscribeOnceCallbacks.forEach((e) => {
+      e(data);
+    });
+
+    this.subscribeOnceList.set(name, []);
+
+    const subscribeOnceAsyncCallbacks =
+      this.subscribeOnceAsyncList.get(name) || [];
+    subscribeOnceAsyncCallbacks.forEach((e) => {
+      e(data);
+    });
+
+    this.subscribeOnceAsyncList.set(name, []);
+  };
+
+  this.publishAll = function (data) {
+    const entries = this.subscriptionList.entries();
+    for (let [key, value] of entries) {
+      value.forEach((e) => {
+        e(data);
+      });
+    }
+  };
 }
 
-const emitter = new EventEmitter();
-const subscription = emitter.subscribe("modify", (link) => {
-    console.log(`Modified: ${link}`);
+// Test cases
+const events = new Events();
+
+const newUserNewsSubscription = events.subscribe("new-user", function (payload) {
+  console.log(`Sending Q1 News to: ${payload}`);
 });
-const subscription1 = emitter.subscribe("modify", (link) => {
-    console.log(`Modified1: ${link}`);
+
+events.publish("new-user", "Jhon");
+
+//output: "Sending Q1 News to: Jhon"
+
+const newUserNewsSubscription2 = events.subscribe("new-user", function (payload) {
+  console.log(`Sending Q2 News to: ${payload}`);
 });
-emitter.emit("modify", "test@gmail.com");
-subscription.remove();
-// No event will get published as it is removed
-emitter.emit("modify", "test@gmail.com");
-// No event found
-emitter.emit("noEventfount", "test@gmail.com");
+
+events.publish("new-user", "Doe");
+
+//output: "Sending Q1 News to: Doe"
+//output: "Sending Q2 News to: Doe"
+
+newUserNewsSubscription.remove(); // Q1 news is removed
+
+events.publish("new-user", "Foo");
+//output: "Sending Q2 News to: Foo"
+
+events.publishAll("FooBar");
+//output: "Sending Q2 News to: FooBar"
+
+events.subscribeOnce("new-user", function (payload) {
+  console.log(`I am invoked once ${payload}`);
+});
+
+events.publish("new-user", "Foo Once");
+//output: "Sending Q2 News to: Foo Once" - normal event
+//output: "I am invoked once Foo Once" - once event
+
+events.publish("new-user", "Foo Twice");
+//output: "Sending Q2 News to: Foo Twice" - normal event
+// once event should not invoke for second time
+
+
+events.subscribeOnceAsync("new-user").then(function (payload) {
+  console.log(`I am invoked once ${payload}`);
+});
+
+events.publish("new-user", "Foo Once Async");
+//output: "Sending Q2 News to: Foo Once Async"
+//output: "I am invoked once Foo Once Async"
