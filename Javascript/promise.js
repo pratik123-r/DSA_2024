@@ -1,72 +1,109 @@
 const STATE = {
-    PENDING: 'pending',
-    FULFILLED: 'fulfilled',
-    REJECTED: 'rejected',
+  PENDING: 'pending',
+  FULFILLED: 'fulfilled',
+  REJECTED: 'rejected',
 };
 
 class MyPromise {
-    thenCbs;
-    catchCbs;
-    state = STATE.PENDING;
+  #state = STATE.PENDING;
+  #value;
+  #thenCbs = [];
+  #catchCbs = [];
 
-    constructor(cb) {
-        try {
-            cb(this.resolve, this.reject)
-        } catch (error) {
-            this.reject(error)
-        }
+  constructor(cb) {
+    try {
+      cb(this.#resolve, this.#reject);
+    } catch (err) {
+      this.#reject(err);
     }
+  }
 
+  #runCallbacks = () => {
+    if (this.#state === STATE.FULFILLED) {
+      this.#thenCbs.forEach(cb => cb(this.#value));
+      this.#thenCbs = [];
+    } else if (this.#state === STATE.REJECTED) {
+      if (this.#catchCbs.length === 0) {
+        // Unhandled rejection
+        console.error('Unhandled promise rejection:', this.#value);
+      }
+      this.#catchCbs.forEach(cb => cb(this.#value));
+      this.#catchCbs = [];
+    }
+  }
 
-    resolve = (val) => {
-        this.state = STATE.FULFILLED
-        if (this.thenCbs)
-            this.thenCbs(val)
-    };
+  #resolve = (val) => {
+    if (this.#state !== STATE.PENDING) return;
+    if (val instanceof MyPromise) {
+      val.then(this.#resolve, this.#reject);
+      return;
+    }
+    this.#value = val;
+    this.#state = STATE.FULFILLED;
+    queueMicrotask(this.#runCallbacks);
+  }
 
-    reject = (val) => {
-        this.state = STATE.REJECTED
-        if (this.catchCbs)
-            this.catchCbs(val)
+  #reject = (val) => {
+    if (this.#state !== STATE.PENDING) return;
+    if (val instanceof MyPromise) {
+      val.then(this.#resolve, this.#reject);
+      return;
+    }
+    this.#value = val;
+    this.#state = STATE.REJECTED;
+    queueMicrotask(this.#runCallbacks);
+  }
 
-    };
+  then = (thenCb, catchCb) => {
+    return new MyPromise((resolve, reject) => {
+      this.#thenCbs.push((result) => {
+        if (!thenCb) {
+          resolve(result);
+          return;
+        }
+        try {
+          const returned = thenCb(result);
+          returned instanceof MyPromise ? returned.then(resolve, reject) : resolve(returned);
+        } catch (err) {
+          reject(err);
+        }
+      });
 
-    then = (thenCb, catchCb) => {
-        return new MyPromise((reslove, reject) => {
-            this.thenCbs = (val) => {
-                if (!thenCb) {
-                    reslove(val)
-                    return
-                }
-                const result = thenCb(val);
-                if (result instanceof MyPromise) {
-                    result.then(reslove, reject)
-                    return
-                }
-                reslove(result)
-            }
-            this.catchCbs = (val) => {
-                if (!catchCb) {
-                    reject(val)
-                    return
-                }
-                const result = catchCb(val);
-                if (result instanceof MyPromise) {
-                    result.then(reslove, reject)
-                    return
-                }
-                reject(result)
-            }
-        })
+      this.#catchCbs.push((err) => {
+        if (!catchCb) {
+          reject(err);
+          return;
+        }
+        try {
+          const returned = catchCb(err);
+          returned instanceof MyPromise ? returned.then(resolve, reject) : resolve(returned);
+        } catch (err) {
+          reject(err);
+        }
+      });
 
-    };
+      this.#runCallbacks(); // In case it's already resolved/rejected
+    });
+  }
 
-    catch = (cb) => {
-        this.then(null, cb)
-    };
+  catch = (catchCb) => {
+    return this.then(null, catchCb);
+  }
 
-
+  finally = (finallyCb) => {
+    return this.then(
+      val => {
+        finallyCb();
+        return val;
+      },
+      err => {
+        finallyCb();
+        throw err;
+      }
+    );
+  }
 }
+
 
 new MyPromise((resolve, reject) => {
     setTimeout(() => {
