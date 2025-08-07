@@ -8,27 +8,27 @@ const apiCall = (parms) => {
 };
 
 const retryPromis = async (promise, retry) => {
-    try {
-      let ans = await promise();
-      return ans;
-    } catch (error) {
-      if (retry == 0) {
-        throw error
-      } else {
-          return retryPromis(promise, retry-1)
-      }
+  try {
+    let ans = await promise();
+    return ans;
+  } catch (error) {
+    if (retry == 0) {
+      throw error;
+    } else {
+      return retryPromis(promise, retry - 1);
     }
+  }
 
-//   for (let index = 0; index < retry; index++) {
-//     try {
-//       let ans = await promise();
-//       return ans;
-//     } catch (error) {
-//       if (index == retry - 1) {
-//         throw error
-//       }
-//     }
-//   }
+  //   for (let index = 0; index < retry; index++) {
+  //     try {
+  //       let ans = await promise();
+  //       return ans;
+  //     } catch (error) {
+  //       if (index == retry - 1) {
+  //         throw error
+  //       }
+  //     }
+  //   }
 };
 
 const compute = async () => {
@@ -39,4 +39,17 @@ const compute = async () => {
     console.log(error.message);
   }
 };
-compute();
+// compute();
+
+new Promise((res, rej) => {
+  res(
+    new Promise((res, rej) => {
+      res(2);
+    })
+  );
+}).then((err) => {
+  
+  console.log("jdjdj", err);
+  
+
+});
