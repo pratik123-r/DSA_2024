@@ -1,0 +1,71 @@
+<html>
+  <div class="a" id="root">
+    <div class="b" id="b-1">
+      <div class="c" id="c-1"></div>
+      <div class="c" id="c-2"></div>
+    </div>
+    <div class="b" id="b-2">
+      <div class="c" id="c-3"></div>
+    </div>
+  </div>
+</html>
+
+<script>
+  function getByClassNameHierarchy(element, classNames) {
+    // get all the classnames
+    const classList = classNames.split(">");
+
+    // pass the array as a reference
+    const result = [];
+
+    // traverse the dom from the root
+    traverseDOM(element, classList, 0, result);
+
+    // return the result
+    return result;
+  }
+
+  // helper function
+  function traverseDOM(element, classNames, index, result) {
+    // if the element is not present
+    if (!element) {
+      return;
+    }
+
+    // get the current class name
+    const targetClass = classNames[index];
+
+    // if the last class of the classNames
+    // and the element contains the class.
+    // add the element to the result
+    if (
+      index === classNames.length - 1 &&
+      element.classList.contains(targetClass)
+    ) {
+      result.push(element);
+      return;
+    }
+
+    // iterate each children of the element
+    for (const child of element.children) {
+      // if the child has the class
+      // recursively traverse and search for the next class in the child
+      // thus increase the index by one
+      if (element.classList.contains(targetClass)) {
+        traverseDOM(child, classNames, index + 1, result);
+      }
+      // else start the search from the scratch in the child
+      else {
+        traverseDOM(child, classNames, 0, result);
+      }
+    }
+  }
+  console.log(getByClassNameHierarchy(document.getElementById('root'), 'a>b>c'));
+</script>
+
+<!-- Output:
+[
+  <div class="c" id="c-1"></div>,
+  <div class="c" id="c-2"></div>,
+  <div class="c" id="c-3"></div>
+] -->
