@@ -30,12 +30,8 @@ let obj2 = {
 
 function merge(obj1, obj2) {
   for (const key in obj2) {
-    if (typeof obj2[key] === "object") {
-      if (obj1[key]) {
+    if (typeof obj2[key] === "object" && typeof obj2[key] === "object") {
         merge(obj1[key], obj2[key]);
-      } else {
-        obj1[key] = obj2[key];
-      }
     } else {
       obj1[key] = obj2[key];
     }
