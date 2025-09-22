@@ -30,12 +30,12 @@ function objectMapping(arr) {
 
 
 function parentToChild(obj, key) {
-    
-    if(obj[key]) {
-        return  parentToChild(obj, obj[key]) + ' -> ' + key 
-    } else {
-        return key 
+    let ans = key
+    while(obj[key]) {
+        ans = obj[key] + ' -> ' + ans
+        key = obj[key]
     }
+    return ans
 }
 
 function getRelation() {
