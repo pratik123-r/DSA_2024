@@ -64,7 +64,7 @@ function threeSum(array, sum) {
     }
     return arraySet.getArrays()
 }
-function triplet(n, arr) {
+function triplet(arr, n) {
     let ans = [];
     arr.sort((a, b) => a - b);
     for (let i = 0; i < n; i++) {
@@ -95,4 +95,4 @@ function triplet(n, arr) {
 }
 
 
-console.log(threeSum([-1, 0, 1, 2, -1, -4,0,0], 0));
+console.log(triplet([-1, 0, 1, 2, 0,-1, 0,-4,0,0], 0));

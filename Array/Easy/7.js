@@ -21,18 +21,15 @@
  */
 
 function moveZeroes(arr) {
-    let j = 0;
-    for (let i = 0; i < arr.length; i++) {
-
-        if(arr[i]!=0) {
-            let temp = arr[j];
-            arr[j] = arr[i];
-            arr[i] = temp;
-            j++
+    let i = 0;
+    for (let j = 0; j < arr.length; j++) {
+        if(arr[j] != 0) {
+            [arr[i], arr[j]] = [arr[j], arr[i]]
+            i++;
         }
-        
     }
 }
+
 let arr = [1,2,0,1 ,0 ,2 ,3 ,0 ,4 ,0 ,1]
 moveZeroes(arr)
 console.log(arr);

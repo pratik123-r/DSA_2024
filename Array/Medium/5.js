@@ -37,22 +37,19 @@
 
  */
 
-function longestSum(arr, sum) {
+function longestSum(arr) {
     let map = new Map()
-    let total = 0;
-    let maxSum = -1;
+    let ans = 0
+    let prefix = 0
+    map.set(0, -1)
     for (let i = 0; i < arr.length; i++) {
-        total += arr[i]
-        if(total === sum) {
-            maxSum = Math.max(maxSum, i+1)
+        prefix += arr[i]
+        if(map.has(prefix)) {
+            ans = Math.max(i - map.get(prefix))
         }
-        if (!map.has(total)) { // for nagative numbers
-            map.set(total, i);
-        }
-        if(map.has(total - sum)) {
-            maxSum = Math.max(i - map.get(total - sum), maxSum)
-        }
+        if(!map.has(prefix))
+            map.set(prefix, i)
     }
-    return maxSum;
+    return ans
 }
-console.log(longestSum([6, -2, 2, -8, 1, 7, 4, -10], 0));
+console.log(longestSum([6, -2, 2, -8, 1, 7, 4, -10]));

@@ -15,21 +15,18 @@
 
 function longestSum(arr, sum) {
     let map = new Map()
-    let total = 0;
-    let maxSum = -1;
+    let ans = 0
+    let prefix = 0
+    map.set(0, -1)
     for (let i = 0; i < arr.length; i++) {
-        total += arr[i]
-        if(total === sum) {
-            maxSum = Math.max(maxSum, i+1)
+        prefix += arr[i]
+        if(map.has(prefix - sum)) {
+            ans = Math.max(i - map.get(prefix - sum))
         }
-        if (!map.has(total)) { // for nagative numbers
-            map.set(total, i);
-        }
-        if(map.has(total - sum)) {
-            maxSum = Math.max(i - map.get(total - sum), maxSum)
-        }
+        if(!map.has(prefix))
+            map.set(prefix, i)
     }
-    return maxSum;
+    return ans
 }
 // 1, 2, 1, 3, 5, 1, 9
 // 1, 3 , 4, 7, 12
@@ -41,4 +38,3 @@ console.log(longestSum([2,1,1,3,5,1,9], 10)); // Output: 4 (subarray [1,1,3,5])
 
 console.log(longestSum([1, -1, 5, -2, 3], 3));  // Output: 4 (subarray [1, -1, 5, -2])
 console.log(longestSum([-2, -1, 2, 1], 1));  // Output: 2 (subarray [-1, 2])
-
