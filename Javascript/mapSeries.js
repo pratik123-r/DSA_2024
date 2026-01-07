@@ -14,6 +14,37 @@ function mapSeries(arr, callback) {
   }, Promise.resolve([]));
 }
 
+// Promise.resolve([])                     // Start
+//   .then(val => {
+//     // 1️⃣ Process first item
+//     return new Promise((resolve, reject) => {
+//       // ... async operation 1 ...
+//       resolve([...val, "result1"]);
+//     });
+//   })
+//   .then(val => {
+//     // 2️⃣ Process second item
+//     return new Promise((resolve, reject) => {
+//       // ... async operation 2 ...
+//       resolve([...val, "result2"]);
+//     });
+//   })
+//   .then(val => {
+//     // 3️⃣ Process third item
+//     return new Promise((resolve, reject) => {
+//       // ... async operation 3 ...
+//       resolve([...val, "result3"]);
+//     });
+//   })
+//   .then(finalArray => {
+//     // ✅ All done
+//     console.log(finalArray); // ["result1", "result2", "result3"]
+//   })
+//   .catch(err => {
+//     console.error("Error:", err);
+//   });
+
+
 
 let numPromise = mapSeries([1, 2, 3, 4, 5], function (num, callback) {
   setTimeout(function () {

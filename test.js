@@ -48,14 +48,9 @@
 //         }
 //     }
 //     return curroObj
-// } 
+// }
 
 // console.log(getDataRecursive(obj, path));
-
-
-
-
-
 
 // let close = (obj, path) => {
 //     path = path.split('.')
@@ -75,18 +70,11 @@
 
 //     }
 
-
 //     return solve(obj)
 
 // }
 
-
-
-
-
 // console.log(close(obj, 'name.asdgh.hjfke.dded.1.3'));
-
-
 
 // class ShortUrl {
 //     counter = 8977887
@@ -95,12 +83,12 @@
 
 //     constructor() {}
 
-//     getCounter() {        
+//     getCounter() {
 //         return ++this.counter;
 //     }
 
 //     generateShortId() {
-//         let count = this.getCounter()        
+//         let count = this.getCounter()
 //         let ans = ''
 //         while (count) {
 //             let mod = count % 62;
@@ -140,25 +128,26 @@
 // shortUrl.generateShortUrl("https://www.w3schools.com/react/react_useref.asp4")
 // console.log(shortUrl.shortIdToUrlMapping, shortUrl.getOriginalUrl("hYfb"));
 
-var minZeroArray = function (nums, queries) {
-   let ans = 0;
-   for (let i = 0; i < nums.length; i++) {
-      let flag = false;
-      for (let j = 0; j < queries.length; j++) {
-         if (queries[j][0] <= queries[j][2] && queries[j][1] >= queries[j][2] && nums[i]) {
-            flag = true
-            nums[i] -= Math.min(nums[i], queries[j][2])
-         }
-      }
-      if (flag)
-         ans++
-      }
+// var minZeroArray = function (nums, queries) {
+//    let ans = 0;
+//    for (let i = 0; i < nums.length; i++) {
+//       let flag = false;
+//       for (let j = 0; j < queries.length; j++) {
+//          if (queries[j][0] <= queries[j][2] && queries[j][1] >= queries[j][2] && nums[i]) {
+//             flag = true
+//             nums[i] -= Math.min(nums[i], queries[j][2])
+//          }
+//       }
+//       if (flag)
+//          ans++
+//       }
 
-   for (let i = 0; i < nums.length; i++) {
-      if (nums[i] != 0)
-         return -1;
-   }
-   return ans
-};
+//    for (let i = 0; i < nums.length; i++) {
+//       if (nums[i] != 0)
+//          return -1;
+//    }
+//    return ans
+// };
 
-minZeroArray([2, 0, 2], [[0, 2, 1], [0, 2, 1], [1, 1, 3]])
+// minZeroArray([2, 0, 2], [[0, 2, 1], [0, 2, 1], [1, 1, 3]])
+
