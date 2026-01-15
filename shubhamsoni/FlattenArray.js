@@ -1,24 +1,46 @@
-const flattenArrayIterative = (arr) => {
-    let ans = []
-    for (let i = 0; i < arr.length; i++) {
-        const stack = arr[i];
-        let temp = []
-        while (stack.length) {
-            let element = stack.pop()
-            if (Array.isArray(element)) {
-                stack.push(...element)
-            } else {
-                temp.push(element)
-            }
-        }
-        ans = [...ans, ...temp.reverse()]
+function flattenArrayIterative(arr) {
+  let ans = [];
+  let stack = [...arr]; 
+
+  while (stack.length) {
+    let element = stack.pop();
+    if (Array.isArray(element)) {
+      stack.push(...element);
+    } else {
+      ans.push(element);
     }
-    return ans
-};
+  }
+
+  return ans.reverse();
+}
+
 
 const resultIterative = flattenArrayIterative([[[[0]], [1]], [[[2], [3]]], [[4],
 [5]]])
 console.log(resultIterative);
+
+
+function flat(arr, depth = 1) {
+  let ans = [];
+  let stack = arr.map(value => ({ value, depth }));
+
+  while (stack.length) {
+    const { value, depth } = stack.pop();
+
+    if (Array.isArray(value) && depth > 0) {
+      for (let i = 0 ; i < value.length; i++) {
+        stack.push({ value: value[i], depth: depth - 1 });
+      }
+    } else {
+      ans.push(value);
+    }
+  }
+
+  return ans.reverse();
+}
+flat([1, [2, [3, [4]]]], 2);
+
+
 
 const flattenArrayRecursive = (array) => {
     let ans = []

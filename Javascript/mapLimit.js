@@ -38,6 +38,18 @@ function mapLimit(arr, limit, callback) {
   // });
 }
 
+// Promise.resolve([])
+// .then(data1 => {
+//   return promiseForBatch1(data1);
+// })
+// .then(data2 => {
+//   return promiseForBatch2(data2);
+// })
+// .then(data3 => {
+//   return promiseForBatch3(data3);
+// });
+
+
 let numPromise = mapLimit([1, 2, 3, 4, 5], 3, function (num, callback) {
   setTimeout(function () {
     num = num * 2;
