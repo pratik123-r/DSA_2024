@@ -32,7 +32,7 @@ var countPaths = function (n, roads) {
 countPaths(7, [[0,6,7],[0,1,2],[1,2,3],[1,3,3],[6,3,3],[3,5,1],[6,5,1],[2,5,1],[0,4,5],[4,6,2]])
 
 
-
+// [[0,1,4],[0,2,1],[1,3,2],[2,3,8],[3,4,6]] - check this one why we need if(dist > cost[node]) continue;
 
 
 

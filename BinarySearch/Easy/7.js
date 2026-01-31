@@ -38,3 +38,23 @@ console.log("The peak is at index:", ans);
 
 
 
+
+function lowerBound(arr, x){
+    let l = 0;
+    let r = arr.length -1
+    let ans = arr.length
+
+    while (l < r) {
+        let mid = Math.floor((l+r)/2)
+        if(arr[mid] == x)
+            return mid
+        else if(arr[mid] > x) {
+            ans = arr[mid]
+            r = mid -1
+        } else {
+            l = mid + 1
+        }
+    }
+    return ans
+}
+

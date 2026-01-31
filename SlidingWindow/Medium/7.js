@@ -29,13 +29,22 @@
     
         let curr = res;
     
-        for (let i = k - 1; i >= 0; i--) {
-            // Remove the last visited element and add the non-visited element from the end
-            curr -= cardPoints[i];
-            curr += cardPoints[cardPoints.length - k + i];
+        // for (let i = k - 1; i >= 0; i--) {
+        //     // Remove the last visited element and add the non-visited element from the end
+        //     curr -= cardPoints[i];
+        //     curr += cardPoints[cardPoints.length - k + i];
     
-            // Check the maximum value of any possible combination
-            res = Math.max(res, curr);
+        //     // Check the maximum value of any possible combination
+        //     res = Math.max(res, curr);
+        // }
+        let i = k-1;
+        let j = cardPoints.length - 1
+        while (i >= 0) {
+            curr -= cardPoints[i];
+           curr += cardPoints[j];
+           res = Math.max(res, curr);
+           i--
+           j--
         }
     
         return res;

@@ -26,21 +26,43 @@
 
  */
 
-function maxProduct(arr) {
-    let maxProduct = arr[0];
-    let product = arr[0];
-    for (let index = 1; index < arr.length; index++) {
-        if(arr[index] === 0) {
-            maxProduct = Math.max(maxProduct, arr[index]);
-            product = 1;
-            continue;
-        }else {
-            product *= arr[index]
+// This function returns the maximum product subarray
+// using prefix and suffix traversal
+class Solution {
+    maxProductSubArray(arr) {
+        // Get the length of array
+        const n = arr.length;
+
+        // Initialize prefix and suffix products
+        let pre = 1, suff = 1;
+
+        // Initialize answer as negative infinity
+        let ans = -Infinity;
+
+        // Traverse from both directions
+        for (let i = 0; i < n; i++) {
+            // Reset prefix if zero
+            if (pre === 0) pre = 1;
+
+            // Reset suffix if zero
+            if (suff === 0) suff = 1;
+
+            // Multiply prefix with front element
+            pre *= arr[i];
+
+            // Multiply suffix with back element
+            suff *= arr[n - i - 1];
+
+            // Update the maximum product so far
+            ans = Math.max(ans, pre, suff);
         }
-        product = Math.max(arr[index], product)
-        maxProduct = Math.max(maxProduct, product);
+
+        // Return final result
+        return ans;
     }
-    return Math.max(maxProduct);
 }
 
-console.log(maxProduct([-2, 0, -1]));
+// Sample usage
+const arr = [2, 3, -2, 4];
+const sol = new Solution();
+console.log(sol.maxProductSubArray(arr));
