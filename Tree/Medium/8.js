@@ -57,3 +57,26 @@ root = createTree([1, 2, 3, 4, 5, null, 6, null, null, 7, 8, null, null, 9, 10])
 
 
 console.log(verticalOrderTraversal(root));
+
+
+// dfs
+function vertical(root) {
+    let map = new Map()
+   //[ 6 - [[], [], []] ]
+    let sol = (root, r, c) => {
+        if(!root) return
+        if(!map.get(c)) {
+            map.set(c, [])
+        }
+        map.get(c).push([r, root.val])
+        sol(root.left, r+1, c-1)
+        sol(root.right, r+1, c+1)
+    }
+    sol(root, 0, 0)
+    let arr = Array.from(map).sort((a, b) => a[0] - b[0])
+    let ans = []
+    for (const [c, rows]  of arr) {
+        ans = [...ans, ...rows.sort((a,b) => a[0] - b[0]).map(([r, val]) => val)]
+    }
+    return ans
+}

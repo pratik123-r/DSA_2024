@@ -7,35 +7,40 @@ const { createTree, TreeNode } = require('./../tree-helper')
 
 
 function distanceK(root, target, k) {
-    let map = new Map()
-    dfs(root, null, map)
-    let visited = new Set()
-    visited.add(target)
-    let queue = [target];
+    let map = new Map();
+    dfs(root, null, map); // build child → parent map
+
+    let visited = new Set();
+    visited.add(target);
+
+    // Queue stores pairs: [node, distanceFromTarget]
+    let queue = [[target, 0]];
+
+    let result = [];
+
     while (queue.length) {
-        let currentLevel = queue.length
-        if (k == 0) {
-            return queue.map((node) => node.val)
+        let [node, dist] = queue.shift();
+
+        // If current node is at distance k, add to result
+        if (dist === k) {
+            result.push(node.val);
         }
-        for (let i = 0; i < currentLevel; i++) {
-            node = queue.shift()
-            if (node.left && !visited.has(node.left)) {
-                queue.push(node.left)
-                visited.add(node.left)
-            }
-            if (node.right && !visited.has(node.right)) {
-                queue.push(node.right)
-                visited.add(node.right)
-            }
-            if (map.get(node) && !visited.has(map.get(node))) {
-                queue.push(map.get(node))
-                visited.add(map.get(node))
+
+        // Only expand neighbors if dist < k
+        if (dist < k) {
+            let neighbors = [node.left, node.right, map.get(node)];
+            for (let nei of neighbors) {
+                if (nei && !visited.has(nei)) {
+                    visited.add(nei);
+                    queue.push([nei, dist + 1]);
+                }
             }
         }
-        k--
     }
-    return []
+
+    return result;
 }
+
 
 const dfs = (node, parent, map) => {
     if (!node) return;

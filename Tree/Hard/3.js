@@ -6,42 +6,38 @@
 const { createTree, TreeNode } = require('./../tree-helper')
 
 
-function widthOfBinaryTree(root) {
-    let ans = 0;
-    let queue = [{ node: root, index: 0 }]
+function widthOfBinaryTree(arr) {
+    if (!arr.length || arr[0] === null) return 0;
+
+    let maxWidth = 0;
+    // Queue stores [index in array, heapIndex]
+    let queue = [[0, 0]];
+
     while (queue.length) {
-        let currentLevel = queue.length
+        const levelLength = queue.length;
+        const firstHeapIndex = queue[0][1];
+        const lastHeapIndex = queue[queue.length - 1][1];
+        maxWidth = Math.max(maxWidth, lastHeapIndex - firstHeapIndex + 1);
 
-        let max = Number.MIN_VALUE
-        let min = Number.MAX_VALUE
+        for (let i = 0; i < levelLength; i++) {
+            const [arrIndex, heapIndex] = queue.shift();
 
-        for (let i = 0; i < currentLevel; i++) {
-            let { node, index } = queue.shift();
-            max = Math.max(max, index)
-            min = Math.min(min, index)
-            if (node.left) {
-                queue.push({
-                    node: node.left,
-                    index: (2 * index) + 1,
-                })
+            // Left child in array
+            const leftIndex = 2 * arrIndex + 1;
+            if (leftIndex < arr.length && arr[leftIndex] !== null) {
+                queue.push([leftIndex, 2 * heapIndex]);
             }
-            if (node.right) {
-                queue.push({
-                    node: node.right,
-                    index: (2 * index) + 2,
-                })
+
+            // Right child in array
+            const rightIndex = 2 * arrIndex + 2;
+            if (rightIndex < arr.length && arr[rightIndex] !== null) {
+                queue.push([rightIndex, 2 * heapIndex + 1]);
             }
         }
-        ans = Math.max(ans, max - min + 1)
-
     }
-    return ans
 
-
+    return maxWidth;
 }
-
-
-
 
 
 
