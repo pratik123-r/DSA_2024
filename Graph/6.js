@@ -38,7 +38,7 @@ var updateMatrix = function (mat) {
         dr >= 0 &&
         dc < clen &&
         dc >= 0 &&
-        mat[dr][dc] > mat[row][col]
+        mat[dr][dc] > mat[row][col] + 1
       ) {
         mat[dr][dc] = mat[row][col] + 1;
         queue.push({ row: dr, col: dc });
